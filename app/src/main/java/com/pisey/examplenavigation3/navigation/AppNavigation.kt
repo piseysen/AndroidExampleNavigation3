@@ -1,6 +1,7 @@
 package com.pisey.examplenavigation3.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,11 +11,13 @@ import com.pisey.examplenavigation3.ui.screen.*
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.Home.route
+        startDestination = Routes.Home.route,
+        modifier = modifier
     ) {
         composable(Routes.Home.route) {
             HomeScreen(navController = navController)

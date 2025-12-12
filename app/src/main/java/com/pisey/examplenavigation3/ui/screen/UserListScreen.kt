@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.*
@@ -28,51 +27,53 @@ fun UserListScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showSortMenu by remember { mutableStateOf(false) }
     
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("User List") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    Box {
-                        IconButton(onClick = { showSortMenu = true }) {
-                            Icon(Icons.Default.Sort, contentDescription = "Sort")
-                        }
-                        DropdownMenu(
-                            expanded = showSortMenu,
-                            onDismissRequest = { showSortMenu = false }
-                        ) {
-                            SortOrder.entries.forEach { sortOrder ->
-                                DropdownMenuItem(
-                                    text = { Text(sortOrder.toDisplayString()) },
-                                    onClick = {
-                                        viewModel.changeSortOrder(sortOrder)
-                                        showSortMenu = false
-                                    },
-                                    leadingIcon = {
-                                        if (uiState.sortOrder == sortOrder) {
-                                            RadioButton(
-                                                selected = true,
-                                                onClick = null
-                                            )
-                                        }
-                                    }
-                                )
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "All Users",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Box {
+                IconButton(onClick = { showSortMenu = true }) {
+                    Icon(Icons.Default.Sort, contentDescription = "Sort")
+                }
+                DropdownMenu(
+                    expanded = showSortMenu,
+                    onDismissRequest = { showSortMenu = false }
+                ) {
+                    SortOrder.entries.forEach { sortOrder ->
+                        DropdownMenuItem(
+                            text = { Text(sortOrder.toDisplayString()) },
+                            onClick = {
+                                viewModel.changeSortOrder(sortOrder)
+                                showSortMenu = false
+                            },
+                            leadingIcon = {
+                                if (uiState.sortOrder == sortOrder) {
+                                    RadioButton(
+                                        selected = true,
+                                        onClick = null
+                                    )
+                                }
                             }
-                        }
+                        )
                     }
                 }
-            )
+            }
         }
-    ) { paddingValues ->
+        
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .weight(1f)
         ) {
             when {
                 uiState.isLoading -> {
@@ -100,13 +101,13 @@ fun UserListScreen(
                 else -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(16.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         item {
                             Text(
-                                text = "All Users (${uiState.users.size})",
-                                style = MaterialTheme.typography.titleLarge,
+                                text = "${uiState.users.size} users",
+                                style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                         }
