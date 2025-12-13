@@ -1,6 +1,7 @@
 package com.pisey.examplenavigation3.navigation
 
 sealed class Routes(val route: String) {
+    data object Login : Routes("login")
     data object Home : Routes("home")
     data object UserList : Routes("user_list")
     data object UserDetail : Routes("user_detail/{userId}") {

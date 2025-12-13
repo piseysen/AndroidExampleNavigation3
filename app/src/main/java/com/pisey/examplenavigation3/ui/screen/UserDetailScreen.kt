@@ -35,32 +35,39 @@ fun UserDetailScreen(
         }
     }
     
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("User Details") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { viewModel.refresh() }) {
-                        Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-                    }
-                    if (!uiState.isEditing) {
-                        IconButton(onClick = { viewModel.toggleEditMode() }) {
-                            Icon(Icons.Default.Edit, contentDescription = "Edit")
-                        }
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Box(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Header with back button and title
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+            }
+            Text(
+                text = "User Details",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.weight(1f)
+            )
+            IconButton(onClick = { viewModel.refresh() }) {
+                Icon(Icons.Default.Refresh, contentDescription = "Refresh")
+            }
+            if (!uiState.isEditing) {
+                IconButton(onClick = { viewModel.toggleEditMode() }) {
+                    Icon(Icons.Default.Edit, contentDescription = "Edit")
+                }
+            }
+        }
+        
+        // Content
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
             when {
                 uiState.isLoading -> {
