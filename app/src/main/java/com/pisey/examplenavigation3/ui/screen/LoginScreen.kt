@@ -17,14 +17,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.pisey.examplenavigation3.navigation.Routes
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import com.pisey.examplenavigation3.navigation.Home
 import com.pisey.examplenavigation3.ui.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    backStack: NavBackStack<NavKey>,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -32,9 +33,8 @@ fun LoginScreen(
     
     LaunchedEffect(uiState.isLoginSuccessful) {
         if (uiState.isLoginSuccessful) {
-            navController.navigate(Routes.Home.route) {
-                popUpTo("login") { inclusive = true }
-            }
+            backStack.clear()
+            backStack.add(Home)
         }
     }
     

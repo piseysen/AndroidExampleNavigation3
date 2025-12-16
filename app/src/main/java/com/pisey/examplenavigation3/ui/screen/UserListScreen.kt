@@ -12,16 +12,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import com.pisey.examplenavigation3.data.model.User
-import com.pisey.examplenavigation3.navigation.Routes
+import com.pisey.examplenavigation3.navigation.UserDetail
 import com.pisey.examplenavigation3.ui.viewmodel.SortOrder
 import com.pisey.examplenavigation3.ui.viewmodel.UserListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserListScreen(
-    navController: NavController,
+    backStack: NavBackStack<NavKey>,
     viewModel: UserListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -115,7 +116,7 @@ fun UserListScreen(
                             UserListItem(
                                 user = user,
                                 onClick = {
-                                    navController.navigate(Routes.UserDetail.createRoute(user.id))
+                                    backStack.add(UserDetail(user.id))
                                 }
                             )
                         }
@@ -193,6 +194,7 @@ private fun UserListItem(
         }
     }
 }
+
 
 private fun SortOrder.toDisplayString(): String = when (this) {
     SortOrder.NAME_ASC -> "Name (A-Z)"

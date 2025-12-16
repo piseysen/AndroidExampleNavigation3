@@ -1,5 +1,27 @@
 package com.pisey.examplenavigation3.navigation
 
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object Login : NavKey
+
+@Serializable
+data object Home : NavKey
+
+@Serializable
+data object UserList : NavKey
+
+@Serializable
+data class UserDetail(val userId: String) : NavKey
+
+@Serializable
+data object Settings : NavKey
+
+@Serializable
+data class Profile(val userId: String, val name: String? = null) : NavKey
+
+// Legacy routes for fallback compatibility
 sealed class Routes(val route: String) {
     data object Login : Routes("login")
     data object Home : Routes("home")
@@ -17,9 +39,4 @@ sealed class Routes(val route: String) {
             }
         }
     }
-}
-
-object NavArguments {
-    const val USER_ID = "userId"
-    const val USER_NAME = "name"
 }

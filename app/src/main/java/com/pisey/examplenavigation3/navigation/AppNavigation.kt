@@ -2,70 +2,51 @@ package com.pisey.examplenavigation3.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import com.pisey.examplenavigation3.ui.screen.*
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController,
+    backStack: NavBackStack<NavKey>,
     modifier: Modifier = Modifier
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = Routes.Login.route,
-        modifier = modifier
-    ) {
-        composable(Routes.Login.route) {
-            LoginScreen(navController = navController)
+    NavDisplay(
+        backStack = backStack,
+        modifier = modifier,
+        entryProvider = entryProvider {
+            entry<Login> {
+                LoginScreen(backStack = backStack)
+            }
+            
+            entry<Home> {
+                HomeScreen(backStack = backStack)
+            }
+            
+            entry<UserList> {
+                UserListScreen(backStack = backStack)
+            }
+            
+            entry<UserDetail> { userDetail ->
+                UserDetailScreen(
+                    backStack = backStack,
+                    userId = userDetail.userId
+                )
+            }
+            
+            entry<Settings> {
+                SettingsScreen(backStack = backStack)
+            }
+            
+            entry<Profile> { profile ->
+                ProfileScreen(
+                    backStack = backStack,
+                    userId = profile.userId,
+                    userName = profile.name
+                )
+            }
         }
-        
-        composable(Routes.Home.route) {
-            HomeScreen(navController = navController)
-        }
-        
-        composable(Routes.UserList.route) {
-            UserListScreen(navController = navController)
-        }
-        
-        composable(
-            route = Routes.UserDetail.route,
-            arguments = listOf(
-                navArgument(NavArguments.USER_ID) {
-                    type = NavType.StringType
-                }
-            )
-        ) {
-            UserDetailScreen(navController = navController)
-        }
-        
-        composable(Routes.Settings.route) {
-            SettingsScreen(navController = navController)
-        }
-        
-        composable(
-            route = Routes.Profile.route,
-            arguments = listOf(
-                navArgument(NavArguments.USER_ID) {
-                    type = NavType.StringType
-                },
-                navArgument(NavArguments.USER_NAME) {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
-                }
-            )
-        ) { backStackEntry ->
-            val userId = backStackEntry.arguments?.getString(NavArguments.USER_ID) ?: ""
-            val userName = backStackEntry.arguments?.getString(NavArguments.USER_NAME)
-            ProfileScreen(
-                navController = navController,
-                userId = userId,
-                userName = userName
-            )
-        }
-    }
+    )
 }

@@ -13,19 +13,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import com.pisey.examplenavigation3.ui.viewmodel.UserDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailScreen(
-    navController: NavController,
+    backStack: NavBackStack<NavKey>,
+    userId: String,
     viewModel: UserDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var editedName by remember { mutableStateOf("") }
     var editedEmail by remember { mutableStateOf("") }
     var editedBio by remember { mutableStateOf("") }
+    
+    LaunchedEffect(userId) {
+        viewModel.initialize(userId)
+    }
     
     LaunchedEffect(uiState.user) {
         uiState.user?.let { user ->
@@ -47,7 +53,7 @@ fun UserDetailScreen(
                 .padding(bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { navController.navigateUp() }) {
+            IconButton(onClick = { backStack.removeLastOrNull() }) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }
             Text(
@@ -227,3 +233,4 @@ fun UserDetailScreen(
         }
     }
 }
+

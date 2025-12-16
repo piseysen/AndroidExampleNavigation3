@@ -10,14 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.pisey.examplenavigation3.navigation.Routes
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import com.pisey.examplenavigation3.navigation.Login
 import com.pisey.examplenavigation3.ui.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: NavController,
+    backStack: NavBackStack<NavKey>,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     var isDarkTheme by remember { mutableStateOf(false) }
@@ -136,9 +137,8 @@ fun SettingsScreen(
                     OutlinedButton(
                         onClick = {
                             loginViewModel.logout()
-                            navController.navigate(Routes.Login.route) {
-                                popUpTo(0) { inclusive = true }
-                            }
+                            backStack.clear()
+                            backStack.add(Login)
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
@@ -157,3 +157,4 @@ fun SettingsScreen(
             }
         }
     }
+

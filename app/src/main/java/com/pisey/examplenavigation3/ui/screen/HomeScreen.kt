@@ -12,15 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import com.pisey.examplenavigation3.data.model.User
-import com.pisey.examplenavigation3.navigation.Routes
+import com.pisey.examplenavigation3.navigation.UserDetail
 import com.pisey.examplenavigation3.ui.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    backStack: NavBackStack<NavKey>,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -77,7 +78,7 @@ fun HomeScreen(
                     UserList(
                         users = viewModel.getFilteredUsers(),
                         onUserClick = { user ->
-                            navController.navigate(Routes.UserDetail.createRoute(user.id))
+                            backStack.add(UserDetail(user.id))
                         }
                     )
                 }
@@ -155,3 +156,4 @@ private fun UserCard(
         }
     }
 }
+

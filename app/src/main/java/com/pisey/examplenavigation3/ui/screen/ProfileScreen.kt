@@ -10,12 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import com.pisey.examplenavigation3.navigation.UserDetail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    navController: NavController,
+    backStack: NavBackStack<NavKey>,
     userId: String,
     userName: String?
 ) {
@@ -31,7 +33,7 @@ fun ProfileScreen(
                 .padding(bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { navController.navigateUp() }) {
+            IconButton(onClick = { backStack.removeLastOrNull() }) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Back")
             }
             Text(
@@ -108,7 +110,7 @@ fun ProfileScreen(
             
             OutlinedButton(
                 onClick = {
-                    navController.navigate("user_detail/$userId")
+                    backStack.add(UserDetail(userId))
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -117,3 +119,4 @@ fun ProfileScreen(
         }
     }
 }
+

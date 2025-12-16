@@ -1,11 +1,9 @@
 package com.pisey.examplenavigation3.ui.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pisey.examplenavigation3.data.model.User
 import com.pisey.examplenavigation3.data.repository.UserRepository
-import com.pisey.examplenavigation3.navigation.NavArguments
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,16 +20,16 @@ data class UserDetailUiState(
 
 @HiltViewModel
 class UserDetailViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    savedStateHandle: SavedStateHandle
+    private val userRepository: UserRepository
 ) : ViewModel() {
     
-    private val userId: String = checkNotNull(savedStateHandle[NavArguments.USER_ID])
+    private var userId: String = ""
     
     private val _uiState = MutableStateFlow(UserDetailUiState())
     val uiState: StateFlow<UserDetailUiState> = _uiState.asStateFlow()
     
-    init {
+    fun initialize(userId: String) {
+        this.userId = userId
         loadUser()
     }
     
